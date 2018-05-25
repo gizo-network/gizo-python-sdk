@@ -1,1 +1,0 @@
-centrum = "http://localhost:3000"
