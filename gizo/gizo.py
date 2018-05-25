@@ -5,11 +5,10 @@ import base64
 import sys
 from os import path
 from furl import furl
-import gizo.utlis as utlis
 from gizo.centrum import CENTRUM
 from gizo.dispatcher import Dispatcher
 from gizo.env import Envs
-from gizo.job import JobRequest, JobRequests
+from gizo.job import JobRequest
 
 class Gizo:
     def __init__(self, url: str =None, export_file: str= None):
@@ -96,8 +95,8 @@ class Gizo:
         return self.__client.Peers()
     def PublicKey(self) -> str:
         return self.__client.PublicKey()
-    def NewJob(self, fn: str, name: str, priv: bool, privKey: str) -> str:
-        return self.__client.NewJob(self.__readTask(fn), name, priv, privKey)
+    def NewJob(self, fn: str, name: str, priv: bool) -> str:
+        return self.__client.NewJob(self.__readTask(fn), name, priv, self.__keys['priv'])
     def NewExec(self, args:list=None, retries: int=None, priority:int=None, backoff:int=None, exec_time: int=None, interval:int=None, ttl:int=None, envs:Envs=None) -> dict:
         return json.loads(self.__client.NewExec(args, retries, priority, backoff, exec_time, interval, ttl, self.__keys['pub'], json.dumps(envs.envs)))
     def WorkersCount(self) -> int:

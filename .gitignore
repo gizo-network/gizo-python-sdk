@@ -3,4 +3,7 @@
 workspace.py
 /tmp
 /gizo/__pycache__
+/tests/__pycache__
+/tests/.gizo
 .gizo
+.pytest_cache
