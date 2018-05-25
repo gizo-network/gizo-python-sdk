@@ -7,7 +7,7 @@ import gizo.utils as utils
 
 Dispatcher = dispatcher.Dispatcher
 Env = env.Env
-Ens = env.Envs
+Envs = env.Envs
 Gizo = gizo.Gizo
 JobRequest = job.JobRequest
 Priorities = priorities
