@@ -1,19 +1,17 @@
+from furl import furl
 class Dispatcher:
-    def __init__(self, pub=None, ip=None, port=None):
-        self.pub = pub
-        self.ip = ip
-        self.port = port
-    def getPub(self):
-        return self.pub
-    def setPub(self, pub):
-        self.pub = pub
-    def __getIP(self): 
-        return self.ip
-    def setIP(self, ip):
-        self.ip = ip
-    def __getPort(self):
-        return self.port
-    def setPort(self, port):
-        self.port = port
-    def url(self):
-        return "http://{}:{}/rpc".format(self.__getIP(), self.__getPort())
+    def __init__(self, url: str=None):
+        self.url = url
+        self.pub = None
+        self.ip = None
+        self.port = None
+        parsed = furl(url)
+        if parsed.username != None and parsed.host != None and parsed.port != None:
+            self.pub = parsed.username
+            self.ip = parsed.host
+            self.port = parsed.port        
+        else:
+            raise Exception("Unable to parse input url")
+
+    def rpc(self):
+        return "http://{}:{}/rpc".format(self.ip, self.port)

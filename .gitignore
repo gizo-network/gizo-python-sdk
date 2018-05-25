@@ -1,2 +1,6 @@
 .vscode
 /venv
+workspace.py
+/tmp
+/gizo/__pycache__
+.gizo

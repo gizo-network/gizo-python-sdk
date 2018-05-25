@@ -1,4 +1,3 @@
-from gizo.gizo import Dispatcher, Gizo
+from gizo.gizo import Gizo
 
 Gizo = Gizo
-Dispatch = Dispatcher
