@@ -1,1 +1,1 @@
-CENTRUM = "http://localhost:3000"
+CENTRUM = "https://centrum-dev.herokuapp.com"
