@@ -1,7 +1,6 @@
 .vscode
 /venv
 workspace.py
-/tmp
 /gizo/__pycache__
 /tests/__pycache__
 /tests/.gizo
