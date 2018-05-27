@@ -23,14 +23,17 @@ class Gizo:
             self.__file = export_file    
             
         if path.isfile(self.__file):
-            try:
-                self.__import_config()
-                self.__client = self.__connect_dispatcher(self.__dispatcher)
-            except Exception:
-                self.__connect()
-                self.__export_config()
+                try:
+                    self.__import_config()
+                    r = requests.get(self.__dispatcher.status(), timeout=0.5)
+                    self.__client = self.__connect_dispatcher(self.__dispatcher)
+                except Exception:
+                    self.__dispatcher = None
+                    self.__connect()
+                    self.__export_config()
+                
         else:
-            if url is not None:
+            if url != None:
                 try:
                     self.__dispatcher = Dispatcher(url)
                     self.__client = self.__connect_dispatcher(self.__dispatcher)
@@ -44,36 +47,37 @@ class Gizo:
                 self.__keys = self.KeyPair()
                 self.__export_config()
     def __import_config(self):
-        f = open(self.__file, "r")
-        content = json.loads(f.read())
-        f.close()
+        with open(self.__file, "r") as f:
+            content = json.loads(f.read())
         self.__dispatcher = Dispatcher(content["dispatcher"])
         self.__keys = content["keys"]
     def __export_config(self):
         temp: dict = {}
         temp["dispatcher"] = self.__dispatcher.url
         temp["keys"] = self.__keys
-        f = open(self.__file, "w+")
-        f.write(json.dumps(temp))
-        f.close()
+        with open(self.__file, "w+") as f:
+            f.write(json.dumps(temp))
     def __connect(self):
-        dispatchers = requests.get("{}/v1/dispatchers".format(CENTRUM)).json()
-        for dispatcher in dispatchers:
-            try:
-                temp = Dispatcher(dispatcher)
-                self.__client = self.__connect_dispatcher(temp)
-                self.__dispatcher = temp                
-                break
-            except Exception:
-                pass
-        if self.__dispatcher is None:
-            raise Exception("no dispatchers available")   
+        r = requests.get(f"{CENTRUM}/v1/dispatchers")
+        if r.status_code == 200:
+            dispatchers = r.json()
+            for dispatcher in dispatchers:
+                try:
+                    temp = Dispatcher(dispatcher)
+                    self.__client = self.__connect_dispatcher(temp)
+                    self.__dispatcher = temp                
+                    break
+                except Exception:
+                    pass
+            if self.__dispatcher is None:
+                raise Exception("no dispatchers available")   
+        else:
+            raise Exception("unable to connect to centrum")
     def __connect_dispatcher(self, dispatcher: Dispatcher) -> hprose.HproseHttpClient:
-        return hprose.HttpClient(dispatcher.rpc())
+        return hprose.HttpClient(uri=dispatcher.rpc())
     def __readTask(self, fn: str) -> str:
-        f = open(fn, "r")
-        content = f.read()
-        f.close()
+        with open(fn, "r") as f:
+            content = f.read()
         return content
     def Version(self) -> dict:
         return json.loads(self.__client.Version())

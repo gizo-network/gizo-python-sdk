@@ -14,4 +14,6 @@ class Dispatcher:
             raise Exception("Unable to parse input url")
 
     def rpc(self):
-        return "http://{}:{}/rpc".format(self.ip, self.port)
+        return f"http://{self.ip}:{self.port}/rpc"
+    def status(self):
+        return f"http://{self.ip}:{self.port}/status"
