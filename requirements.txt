@@ -14,7 +14,7 @@ more-itertools==4.2.0
 orderedmultidict==0.7.11
 pbr==4.0.3
 pluggy==0.6.0
-py==1.5.3
+py==1.10.0
 pylint==1.9.1
 pytest==3.6.0
 requests==2.18.4
